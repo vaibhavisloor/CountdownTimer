@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Countdown Timer</title>
+  <style>
+    body{
+        background-color: #FFF5E0;
+        color: #141E46;
+        text-align: center;
+    }
+
+
+
+    #timer {
+      position: relative;
+      display: inline-block;
+    }
+
+    #timer input {
+      border: none;
+      outline: none;
+      font: inherit;
+      padding: 0;
+      margin: 0;
+      width: 200px; /* Adjust width as needed */
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Countdown Timer</h1>
+  <h1 id="timer"><input id="timerInput" type="text" value="00:05:00"></h1><br><br>
+  <button id="startButton">Start Timer</button>
+  <button id="resetButton">Reset Timer</button><br><br><br>
+  <center class="cr">&copy; Vaibhav Isloor</center>
+  
+  <script>
+    let remainingTime = 0;
+    let countdownInterval;
+
+    function updateTimeInput() {
+      const hours = Math.floor(remainingTime / 3600 );
+      const minutes = Math.floor((remainingTime % 3600) / 60);
+      const seconds = remainingTime % 60;
+      
+      const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      document.getElementById('timerInput').value = formattedTime;
+    }
+
+    document.getElementById('startButton').addEventListener('click', () => {
+      const inputTime = document.getElementById('timerInput').value;
+      const [hours, minutes, seconds] = inputTime.split(':').map(Number);
+      const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+      if (!isNaN(totalSeconds) && totalSeconds > 0) {
+        remainingTime = totalSeconds;
+        updateTimeInput();
+        
+        clearInterval(countdownInterval);
+        countdownInterval = setInterval(() => {
+          if (remainingTime > 0) {
+            remainingTime--;
+            updateTimeInput();
+          } else {
+            clearInterval(countdownInterval);
+            alert("Countdown timer has ended!");
+          }
+        }, 1000);
+      }
+    });
+    
+    document.getElementById('resetButton').addEventListener('click', () => {
+      clearInterval(countdownInterval);
+      remainingTime = 0;
+      updateTimeInput();
+    });
+  </script>
+</body>
+</html>
